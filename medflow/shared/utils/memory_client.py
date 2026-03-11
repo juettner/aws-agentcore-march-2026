@@ -27,12 +27,14 @@ class MemoryClient:
         memory_id: Optional[str] = None,
         region: Optional[str] = None,
     ):
-        self.memory_id = memory_id or os.getenv("AGENTCORE_MEMORY_ID", "")
+        self.memory_id = (memory_id
+                          or os.getenv("BEDROCK_AGENTCORE_MEMORY_ID")
+                          or os.getenv("AGENTCORE_MEMORY_ID", ""))
         self.region = region or os.getenv("AWS_REGION", "us-west-2")
 
-        # Use the AgentCore runtime client for memory operations
+        # Use the AgentCore client for memory operations
         self.client = boto3.client(
-            "bedrock-agentcore-runtime",
+            "bedrock-agentcore",
             region_name=self.region,
         )
         self.max_results = 10
@@ -40,9 +42,6 @@ class MemoryClient:
 
     def store_episode(self, episode: AdverseEventEpisode) -> bool:
         """Store an adverse event episode in AgentCore Memory.
-
-        Creates a memory event with the episode data, which triggers
-        both semantic extraction and session summarization strategies.
 
         Args:
             episode: The adverse event episode to store.
@@ -52,33 +51,23 @@ class MemoryClient:
         """
         try:
             episode_text = self._format_episode_for_embedding(episode)
-
-            # Use the AgentCore Memory ingest-events API
             actor_id = episode.patient_profile.get("patientId", "unknown")
-            session_id = f"ae-session-{episode.episode_id}"
+            strategy_id = os.getenv("AGENTCORE_MEMORY_SEMANTIC_STRATEGY_ID", "")
 
-            self.client.ingest_memory_events(
+            self.client.batch_create_memory_records(
                 memoryId=self.memory_id,
-                events=[
+                records=[
                     {
-                        "actorId": actor_id,
-                        "sessionId": session_id,
-                        "eventId": str(uuid.uuid4()),
-                        "event": {
-                            "role": "ASSISTANT",
-                            "content": episode_text,
-                        },
-                        "eventTimestamp": episode.timestamp.isoformat()
-                        if hasattr(episode, "timestamp") and episode.timestamp
-                        else datetime.utcnow().isoformat(),
+                        "requestIdentifier": str(uuid.uuid4()),
+                        "namespaces": ["/adverse_events/"],
+                        "content": {"text": episode_text},
+                        "timestamp": datetime.utcnow(),
+                        **({"memoryStrategyId": strategy_id} if strategy_id else {}),
                     }
                 ],
             )
 
-            logger.info(
-                f"Stored episode {episode.episode_id} in memory "
-                f"(actor={actor_id}, session={session_id})"
-            )
+            logger.info(f"Stored episode {episode.episode_id} in memory")
             return True
 
         except ClientError as e:
@@ -93,8 +82,6 @@ class MemoryClient:
     ) -> List[HistoricalCase]:
         """Retrieve similar adverse event cases from AgentCore Memory.
 
-        Uses the semantic memory strategy for similarity-based retrieval.
-
         Args:
             symptoms: List of symptom descriptions
             medications: List of medication names
@@ -105,26 +92,28 @@ class MemoryClient:
         """
         try:
             query_text = self._format_query(symptoms, medications, timeline)
-
-            # Use the AgentCore Memory retrieve API with semantic strategy
             semantic_strategy_id = os.getenv("AGENTCORE_MEMORY_SEMANTIC_STRATEGY_ID", "")
-            response = self.client.retrieve_memory(
+
+            search_criteria: dict = {"searchQuery": query_text, "topK": self.max_results}
+            if semantic_strategy_id:
+                search_criteria["memoryStrategyId"] = semantic_strategy_id
+
+            response = self.client.retrieve_memory_records(
                 memoryId=self.memory_id,
-                strategyId=semantic_strategy_id,
-                query=query_text,
-                namespace=f"/strategies/{semantic_strategy_id}/actors/*/",
+                namespace="/adverse_events/",
+                searchCriteria=search_criteria,
                 maxResults=self.max_results,
             )
 
             cases = []
-            for result in response.get("events", []):
-                content = result.get("event", {}).get("content", "")
-                score = result.get("score", 0.0)
+            for record in response.get("memoryRecordSummaries", []):
+                content = record.get("content", {}).get("text", "")
+                score = record.get("score", 0.0)
 
                 if score >= self.min_similarity_score:
                     cases.append(
                         HistoricalCase(
-                            case_id=result.get("eventId", "unknown"),
+                            case_id=record.get("memoryRecordId", "unknown"),
                             patient_profile={},
                             symptoms=symptoms,
                             medications=medications,
@@ -146,7 +135,7 @@ class MemoryClient:
             return []
 
     def get_session_summary(self, actor_id: str, session_id: str) -> Optional[str]:
-        """Retrieve a session summary from the summary strategy.
+        """Retrieve a session summary from memory.
 
         Args:
             actor_id: The actor (patient) ID
@@ -156,17 +145,15 @@ class MemoryClient:
             Summary text or None if not available.
         """
         try:
-            response = self.client.retrieve_memory(
+            response = self.client.retrieve_memory_records(
                 memoryId=self.memory_id,
-                strategyId=os.getenv("AGENTCORE_MEMORY_SUMMARY_STRATEGY_ID", ""),
-                query=f"Summary for {actor_id} session {session_id}",
-                namespace=f"/summaries/{actor_id}/{session_id}/",
+                namespace="/adverse_events/",
+                searchCriteria={"searchQuery": f"Summary for {actor_id} session {session_id}", "topK": 1},
                 maxResults=1,
             )
-
-            events = response.get("events", [])
-            if events:
-                return events[0].get("event", {}).get("content", None)
+            records = response.get("memoryRecordSummaries", [])
+            if records:
+                return records[0].get("content", {}).get("text")
             return None
 
         except ClientError as e:

@@ -1,0 +1,71 @@
+ADVERSE EVENT REPORTING AND MANAGEMENT GUIDELINES
+MedFlow Clinical Research Institute
+
+1. ADVERSE EVENT CLASSIFICATION
+1.1 Severity Grading (CTCAE v5.0)
+- Grade 1 (Mild): Asymptomatic or mild symptoms; clinical or diagnostic observations only; intervention not indicated
+- Grade 2 (Moderate): Minimal, local or noninvasive intervention indicated; limiting age-appropriate instrumental ADL
+- Grade 3 (Severe): Medically significant but not immediately life-threatening; hospitalization or prolongation of hospitalization indicated; disabling; limiting self-care ADL
+- Grade 4 (Life-threatening): Urgent intervention indicated; life-threatening consequences
+- Grade 5 (Death): Death related to adverse event
+
+1.2 Causality Assessment (WHO-UMC System)
+- Certain: Temporal relationship, cannot be explained by disease or other drugs, positive rechallenge
+- Probable/Likely: Reasonable temporal relationship, unlikely to be attributed to disease or other drugs, reasonable response on withdrawal
+- Possible: Reasonable temporal relationship, could also be explained by disease or other drugs
+- Unlikely: Temporal relationship makes causal relationship improbable, other drugs or disease provide plausible explanations
+- Conditional/Unclassified: More data essential for assessment
+- Unassessable: Information insufficient or contradictory
+
+2. REPORTING TIMELINES
+2.1 Serious Adverse Events (SAEs)
+Initial report: Within 24 hours of investigator awareness
+Follow-up reports: Within 72 hours with additional details
+Final report: Within 30 days of resolution or stabilization
+
+2.2 SUSAR (Suspected Unexpected Serious Adverse Reaction) Reporting
+Fatal/life-threatening: 7 calendar days to regulatory authorities
+Non-fatal/non-life-threatening: 15 calendar days to regulatory authorities
+Annual summary: Development Safety Update Report (DSUR) per ICH E2F
+
+2.3 Regulatory Reporting
+FDA IND Safety Reports: Per 21 CFR 312.32
+EMA reporting: Per EudraVigilance system requirements
+Local authorities: Per country-specific requirements
+
+3. DOSE MODIFICATION ALGORITHMS
+
+3.1 Neutropenia Management
+ANC 1000-1499/µL (Grade 2): Continue treatment, recheck in 1 week
+ANC 500-999/µL (Grade 3): Hold treatment, add G-CSF if clinically indicated, recheck in 3-5 days, resume when ANC ≥ 1500
+ANC < 500/µL (Grade 4): Hold treatment, mandatory G-CSF, consider hospitalization, resume at reduced dose when ANC ≥ 1500 for ≥ 2 consecutive measurements
+Febrile neutropenia: Hospitalize, blood cultures, broad-spectrum IV antibiotics, hold all myelosuppressive treatment
+
+3.2 Hepatotoxicity Management
+ALT/AST 3-5× ULN: Hold treatment, recheck weekly, resume when < 2× ULN
+ALT/AST 5-10× ULN: Hold treatment, hepatology consultation, recheck every 3 days
+ALT/AST > 10× ULN: Discontinue permanently, hepatology consultation
+Hy's Law case (ALT > 3× ULN + bilirubin > 2× ULN): Discontinue permanently, FDA notification
+
+3.3 Immunotherapy-related AE Management
+irAE Grade 1: Continue treatment, monitor closely
+irAE Grade 2: Hold immunotherapy, start prednisone 0.5-1 mg/kg/day, taper over ≥ 4 weeks
+irAE Grade 3: Hold immunotherapy, start prednisone 1-2 mg/kg/day or methylprednisolone equivalent, specialty consultation
+irAE Grade 4: Permanently discontinue immunotherapy, start methylprednisolone 2 mg/kg/day IV, hospitalize, specialty consultation
+
+4. SIGNAL DETECTION CRITERIA
+A safety signal should be escalated for DSMB review when:
+- ≥ 3 cases of the same unexpected SAE in the treatment group
+- Observed SAE rate exceeds expected rate by ≥ 2-fold
+- Any single event suggesting a new or changed risk
+- Any death that is possibly, probably, or definitely related to study drug
+- Cluster of events suggesting a pattern (e.g., geographic cluster, temporal cluster)
+
+5. FDA 21 CFR PART 312 REPORTING REQUIREMENTS
+IND Annual Reports (21 CFR 312.33):
+- Summary of all adverse events
+- Individual case narratives for all SAEs
+- Summary of safety data by body system
+- Comparison of adverse event rates between treatment groups
+- Discussion of any emerging safety signals
+- Updated investigator's brochure if warranted

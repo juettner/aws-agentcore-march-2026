@@ -1,0 +1,47 @@
+# AgentCore Identity Configuration for MedFlow
+# OAuth token management for external system authentication
+
+name: medflow-oauth-manager
+description: OAuth authentication for insurance and regulatory APIs
+
+oauth_providers:
+  - provider_id: insurance_provider_a
+    provider_name: Insurance Provider A
+    authorization_endpoint: https://auth.provider-a.com/oauth/authorize
+    token_endpoint: https://auth.provider-a.com/oauth/token
+    client_id_secret: medflow/oauth/insurance-provider-a/client-id
+    client_secret_secret: medflow/oauth/insurance-provider-a/client-secret
+    scopes:
+      - authorization.read
+      - authorization.write
+    grant_type: client_credentials
+    
+  - provider_id: regulatory_database
+    provider_name: FDA Regulatory Database
+    authorization_endpoint: https://fda-api.gov/oauth/authorize
+    token_endpoint: https://fda-api.gov/oauth/token
+    client_id_secret: medflow/oauth/fda/client-id
+    client_secret_secret: medflow/oauth/fda/client-secret
+    scopes:
+      - reports.read
+      - requirements.read
+    grant_type: client_credentials
+
+token_management:
+  cache_tokens: true
+  cache_ttl_seconds: 3600
+  refresh_before_expiry_seconds: 300  # 5 minutes
+  max_retry_attempts: 3
+  retry_backoff: exponential
+
+security:
+  encrypt_tokens_at_rest: true
+  rotate_secrets_days: 90
+  audit_all_token_requests: true
+  audit_log_group: /aws/agentcore/medflow-audit
+
+tags:
+  Application: MedFlow
+  Component: Identity
+  Environment: Demo
+  Security: OAuth-Management

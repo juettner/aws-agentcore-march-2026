@@ -1,0 +1,47 @@
+# AgentCore Memory Configuration for MedFlow
+# This is a template - actual deployment requires AWS Console or SDK
+
+name: medflow-adverse-events
+description: Episodic memory for adverse event pattern learning
+
+storage_type: episodic
+embedding_model:
+  model_id: amazon.titan-embed-text-v2
+  dimensions: 1024
+
+vector_store:
+  type: opensearch_serverless
+  collection_name: medflow-memory
+  index_name: medflow-adverse-events-index
+  vector_field: embedding
+  metadata_field: metadata
+
+retention_policy:
+  duration_days: 2555  # 7 years per FDA requirements
+  archival_tier: glacier
+  archival_after_days: 365
+
+similarity_search:
+  algorithm: cosine_similarity
+  max_results: 10
+  latency_target_ms: 500
+  min_similarity_score: 0.6
+
+learning_configuration:
+  pattern_update_frequency: daily
+  confidence_threshold: 0.8
+  feedback_loop_enabled: true
+  auto_weight_adjustment: true
+
+privacy_configuration:
+  anonymize_patient_data: true
+  generalize_demographics: true
+  age_range_buckets: 5  # years
+  remove_identifiers: true
+
+tags:
+  Application: MedFlow
+  Component: Memory
+  Environment: Demo
+  DataType: AdverseEvents
+  Compliance: FDA-7-Year-Retention

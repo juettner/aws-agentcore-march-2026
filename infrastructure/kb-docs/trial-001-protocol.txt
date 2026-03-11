@@ -1,0 +1,66 @@
+CLINICAL TRIAL PROTOCOL: TRIAL-001
+Study Title: Phase III Randomized, Double-Blind, Placebo-Controlled Study of Novel GLP-1 Receptor Agonist (MF-2847) in Patients with Type 2 Diabetes Mellitus
+
+Protocol Number: TRIAL-001
+Sponsor: MedFlow Clinical Research Institute
+Principal Investigator: Dr. Rebecca Torres
+Study Phase: Phase III
+
+1. STUDY OBJECTIVES
+Primary Objective: To evaluate the efficacy of MF-2847 compared to placebo in reducing HbA1c levels in patients with Type 2 Diabetes Mellitus over 52 weeks.
+Secondary Objectives: To assess the safety profile of MF-2847, including cardiovascular outcomes and renal function.
+
+2. INCLUSION CRITERIA
+- Age 18-75 years
+- Confirmed diagnosis of Type 2 Diabetes Mellitus for at least 6 months
+- HbA1c between 7.0% and 10.5% at screening
+- BMI between 25 and 45 kg/m²
+- Stable dose of metformin (≥1000 mg/day) for at least 8 weeks prior to screening
+- eGFR ≥ 30 mL/min/1.73 m²
+- Written informed consent obtained
+
+3. EXCLUSION CRITERIA
+- Type 1 Diabetes Mellitus
+- History of diabetic ketoacidosis within the past 6 months
+- History of pancreatitis
+- Severe hepatic impairment (Child-Pugh Class C)
+- History of medullary thyroid carcinoma or MEN 2 syndrome
+- Pregnant or lactating women
+- Known hypersensitivity to GLP-1 receptor agonists
+- Current use of insulin or other injectable diabetes medications
+- Uncontrolled hypertension (systolic >180 mmHg or diastolic >110 mmHg)
+- NYHA Class III or IV heart failure
+- Active malignancy (except non-melanoma skin cancer)
+- Participation in another clinical trial within 30 days of screening
+
+4. STUDY DESIGN
+This is a multicenter, randomized, double-blind, placebo-controlled, parallel-group study.
+Approximately 1,200 patients will be randomized 1:1 to receive:
+- Treatment arm: MF-2847 14mg subcutaneous injection once weekly
+- Control arm: Matching placebo subcutaneous injection once weekly
+
+5. STUDY DURATION
+- Screening period: 2 weeks
+- Treatment period: 52 weeks
+- Follow-up period: 4 weeks
+- Total study duration per patient: approximately 58 weeks
+
+6. ADVERSE EVENT REPORTING
+All adverse events must be reported within 24 hours of awareness.
+Serious adverse events (SAEs) must be reported within 24 hours via the electronic SAE reporting system.
+SUSAR reporting to regulatory authorities within 7 days (fatal/life-threatening) or 15 days (all other SUSARs).
+
+7. DOSING SCHEDULE
+Week 1-4: MF-2847 3.5mg SC once weekly (dose escalation)
+Week 5-8: MF-2847 7mg SC once weekly (dose escalation)
+Week 9-12: MF-2847 10.5mg SC once weekly (dose escalation)
+Week 13-52: MF-2847 14mg SC once weekly (maintenance dose)
+
+8. LABORATORY ASSESSMENTS
+HbA1c: Screening, Week 12, 24, 36, 52
+Fasting plasma glucose: Every 4 weeks
+Lipid panel: Screening, Week 26, 52
+Renal function (eGFR, UACR): Screening, Week 12, 26, 52
+Hepatic function (ALT, AST, bilirubin): Screening, Week 4, 12, 26, 52
+Complete blood count: Screening, Week 12, 26, 52
+Calcitonin: Screening, Week 26, 52

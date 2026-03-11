@@ -1,0 +1,83 @@
+# AgentCore Policy Configuration for MedFlow
+# Natural language rules automatically converted to Cedar policies
+
+name: medflow-authorization-policies
+description: Authorization policies for insurance and regulatory operations
+
+policy_store: cedar
+enforcement_mode: strict
+evaluation_timeout_ms: 100
+default_decision: deny
+
+natural_language_rules:
+  - rule_id: auto_approve_low_cost
+    rule_text: "Automatically approve any procedure under $500"
+    applicable_agents:
+      - insurance_authorization_agent
+    applicable_tools:
+      - submit_authorization_request
+    priority: 1
+    effect: allow
+    
+  - rule_id: supervisor_review_medium_cost
+    rule_text: "Route procedures between $500 and $5000 to supervisor review"
+    applicable_agents:
+      - insurance_authorization_agent
+    applicable_tools:
+      - submit_authorization_request
+    priority: 2
+    effect: allow
+    conditions:
+      - attribute: estimatedCost
+        operator: greater_than_or_equal
+        value: 500
+      - attribute: estimatedCost
+        operator: less_than_or_equal
+        value: 5000
+    
+  - rule_id: human_escalation_high_cost
+    rule_text: "Escalate procedures over $5000 to human decision-maker"
+    applicable_agents:
+      - insurance_authorization_agent
+    applicable_tools:
+      - submit_authorization_request
+    priority: 3
+    effect: allow
+    conditions:
+      - attribute: estimatedCost
+        operator: greater_than
+        value: 5000
+    
+  - rule_id: restrict_patient_data_access
+    rule_text: "Only allow patient data access for authorized agents"
+    applicable_agents:
+      - patient_eligibility_agent
+      - adverse_event_monitor
+      - patient_communication_agent
+    applicable_tools:
+      - get_patient_record
+      - get_lab_results
+    priority: 10
+    effect: allow
+    
+  - rule_id: restrict_regulatory_report_generation
+    rule_text: "Only regulatory report agent can generate reports"
+    applicable_agents:
+      - regulatory_report_agent
+    applicable_tools:
+      - query_regulatory_requirements
+      - generate_pdf_report
+    priority: 10
+    effect: allow
+
+audit_logging:
+  log_all_evaluations: true
+  log_group: /aws/agentcore/medflow-audit
+  include_policy_details: true
+  include_decision_reasoning: true
+
+tags:
+  Application: MedFlow
+  Component: Policy
+  Environment: Demo
+  Compliance: Authorization-Enforcement

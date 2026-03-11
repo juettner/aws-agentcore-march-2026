@@ -1,0 +1,144 @@
+# AgentCore Gateway Configuration for MedFlow
+# Transforms REST APIs into MCP-compatible tools
+
+name: medflow-api-gateway
+description: REST API to MCP tool transformation for EHR and insurance systems
+
+transformations:
+  # Hospital EHR API
+  - source_api:
+      name: hospital-ehr-api
+      base_url: https://ehr.hospital.internal
+      auth_type: api_key
+      auth_config:
+        header_name: X-API-Key
+        secret_name: medflow/ehr-api-key
+    
+    mcp_tools:
+      - tool_name: get_patient_record
+        description: Retrieve complete patient medical record
+        http_method: GET
+        endpoint: /api/v1/patients/{patientId}
+        parameters:
+          - name: patientId
+            type: string
+            required: true
+            description: Unique patient identifier
+        response_schema:
+          type: object
+          properties:
+            patientId: string
+            demographics: object
+            medicalHistory: object
+            currentMedications: array
+            vitalSigns: object
+            labResults: array
+      
+      - tool_name: get_lab_results
+        description: Retrieve patient laboratory test results
+        http_method: GET
+        endpoint: /api/v1/patients/{patientId}/labs
+        parameters:
+          - name: patientId
+            type: string
+            required: true
+          - name: startDate
+            type: string
+            required: false
+            description: Filter results from this date (ISO 8601)
+          - name: endDate
+            type: string
+            required: false
+            description: Filter results to this date (ISO 8601)
+        response_schema:
+          type: array
+          items:
+            type: object
+            properties:
+              testName: string
+              value: number
+              unit: string
+              referenceRange: string
+              testDate: string
+
+  # Insurance Provider API
+  - source_api:
+      name: insurance-provider-api
+      base_url: https://api.insurance-provider.com
+      auth_type: oauth2
+      auth_config:
+        oauth_provider_id: insurance_provider_a
+        scopes:
+          - authorization.read
+          - authorization.write
+    
+    mcp_tools:
+      - tool_name: submit_authorization_request
+        description: Submit insurance authorization request for procedure
+        http_method: POST
+        endpoint: /v2/authorizations
+        parameters:
+          - name: procedureCode
+            type: string
+            required: true
+            description: CPT or HCPCS procedure code
+          - name: patientId
+            type: string
+            required: true
+            description: Patient identifier
+          - name: estimatedCost
+            type: number
+            required: true
+            description: Estimated procedure cost in USD
+          - name: urgency
+            type: string
+            required: false
+            enum: [routine, urgent, emergency]
+        response_schema:
+          type: object
+          properties:
+            authorizationId: string
+            status: string
+            approvalAmount: number
+            expirationDate: string
+
+  # Regulatory Database API
+  - source_api:
+      name: regulatory-database-api
+      base_url: https://api.fda.gov
+      auth_type: oauth2
+      auth_config:
+        oauth_provider_id: regulatory_database
+        scopes:
+          - reports.read
+    
+    mcp_tools:
+      - tool_name: query_regulatory_requirements
+        description: Query regulatory requirements for trial reporting
+        http_method: GET
+        endpoint: /v1/requirements
+        parameters:
+          - name: reportType
+            type: string
+            required: true
+            enum: [IND_Safety, IND_Annual, NDA_Submission]
+          - name: regulatoryBody
+            type: string
+            required: true
+            enum: [FDA, EMA]
+        response_schema:
+          type: object
+          properties:
+            requiredSections: array
+            formatSpecification: string
+            submissionDeadline: string
+
+error_handling:
+  retry_attempts: 3
+  retry_backoff: exponential
+  timeout_seconds: 30
+
+tags:
+  Application: MedFlow
+  Component: Gateway
+  Environment: Demo

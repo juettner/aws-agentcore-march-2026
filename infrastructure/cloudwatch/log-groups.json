@@ -1,0 +1,84 @@
+{
+  "LogGroups": [
+    {
+      "logGroupName": "/aws/agentcore/medflow-orchestrator",
+      "retentionInDays": 2555,
+      "tags": {
+        "Application": "MedFlow",
+        "Agent": "Orchestrator",
+        "Environment": "Demo",
+        "Compliance": "FDA-7-Year-Retention"
+      }
+    },
+    {
+      "logGroupName": "/aws/agentcore/medflow-patient-eligibility",
+      "retentionInDays": 2555,
+      "tags": {
+        "Application": "MedFlow",
+        "Agent": "PatientEligibility",
+        "Environment": "Demo",
+        "Compliance": "FDA-7-Year-Retention"
+      }
+    },
+    {
+      "logGroupName": "/aws/agentcore/medflow-adverse-event",
+      "retentionInDays": 2555,
+      "tags": {
+        "Application": "MedFlow",
+        "Agent": "AdverseEventMonitor",
+        "Environment": "Demo",
+        "Compliance": "FDA-7-Year-Retention"
+      }
+    },
+    {
+      "logGroupName": "/aws/agentcore/medflow-regulatory-report",
+      "retentionInDays": 2555,
+      "tags": {
+        "Application": "MedFlow",
+        "Agent": "RegulatoryReport",
+        "Environment": "Demo",
+        "Compliance": "FDA-7-Year-Retention"
+      }
+    },
+    {
+      "logGroupName": "/aws/agentcore/medflow-insurance-auth",
+      "retentionInDays": 2555,
+      "tags": {
+        "Application": "MedFlow",
+        "Agent": "InsuranceAuthorization",
+        "Environment": "Demo",
+        "Compliance": "FDA-7-Year-Retention"
+      }
+    },
+    {
+      "logGroupName": "/aws/agentcore/medflow-patient-comm",
+      "retentionInDays": 2555,
+      "tags": {
+        "Application": "MedFlow",
+        "Agent": "PatientCommunication",
+        "Environment": "Demo",
+        "Compliance": "FDA-7-Year-Retention"
+      }
+    },
+    {
+      "logGroupName": "/aws/agentcore/medflow-trial-coordinator",
+      "retentionInDays": 2555,
+      "tags": {
+        "Application": "MedFlow",
+        "Agent": "TrialCoordinator",
+        "Environment": "Demo",
+        "Compliance": "FDA-7-Year-Retention"
+      }
+    },
+    {
+      "logGroupName": "/aws/agentcore/medflow-audit",
+      "retentionInDays": 2555,
+      "tags": {
+        "Application": "MedFlow",
+        "LogType": "Audit",
+        "Environment": "Demo",
+        "Compliance": "FDA-7-Year-Retention"
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+CLINICAL TRIAL PROTOCOL: TRIAL-003
+Study Title: Phase III Randomized, Double-Blind Study Comparing Novel JAK1-Selective Inhibitor (MF-7890) with Adalimumab in Patients with Moderate-to-Severe Rheumatoid Arthritis
+
+Protocol Number: TRIAL-003
+Sponsor: MedFlow Clinical Research Institute
+Principal Investigator: Dr. Maria Santos
+Study Phase: Phase III
+
+1. STUDY OBJECTIVES
+Primary Objective: To demonstrate non-inferiority of MF-7890 compared to adalimumab in achieving ACR50 response at Week 24 in patients with moderate-to-severe RA who have had inadequate response to methotrexate.
+Secondary Objectives: To evaluate ACR20/70 responses, DAS28-CRP changes, radiographic progression, patient-reported outcomes, and safety/tolerability.
+
+2. INCLUSION CRITERIA
+- Age 18-80 years
+- Diagnosis of RA per 2010 ACR/EULAR criteria for at least 6 months
+- Active disease: ≥ 6 swollen joints (of 66) and ≥ 6 tender joints (of 68)
+- DAS28-CRP ≥ 3.2 at screening
+- CRP ≥ 0.5 mg/dL or ESR ≥ 28 mm/hr at screening
+- Stable dose of methotrexate (10-25 mg/week) for ≥ 8 weeks prior to screening
+- Inadequate response to at least one conventional DMARD
+- No prior biologic DMARD or JAK inhibitor use
+- Negative tuberculosis test (QuantiFERON or PPD)
+- Written informed consent
+
+3. EXCLUSION CRITERIA
+- Prior use of any biologic DMARD (including TNF inhibitors, IL-6 inhibitors, T-cell costimulation modulators, B-cell depleting agents)
+- Prior use of any JAK inhibitor
+- Active or chronic infection
+- History of serious infection requiring hospitalization within 6 months
+- Herpes zoster within 6 months
+- History of lymphoproliferative disorder or malignancy (except treated basal cell carcinoma)
+- Hemoglobin < 9.0 g/dL
+- ANC < 1,000/µL
+- Lymphocyte count < 500/µL
+- Platelet count < 100,000/µL
+- eGFR < 40 mL/min
+- Hepatic impairment (ALT/AST > 2× ULN)
+- History of DVT/PE or current anticoagulant use
+- Cardiovascular event within 6 months
+
+4. STUDY ARMS
+Arm A: MF-7890 15mg oral once daily + methotrexate + placebo injection
+Arm B: Adalimumab 40mg SC every 2 weeks + methotrexate + placebo oral tablet
+Randomization: 1:1, stratified by region, prior DMARD use, and baseline DAS28-CRP
+
+5. SAFETY MONITORING - SPECIAL INTEREST
+- Herpes zoster reactivation (known JAK inhibitor class effect)
+- Thromboembolic events (DVT, PE, arterial thrombosis)
+- Major adverse cardiovascular events (MACE)
+- Malignancy (including lymphoma)
+- Hepatotoxicity
+- Cytopenias (neutropenia, lymphopenia, anemia)
+- GI perforations
+- Elevated CPK
+
+6. LABORATORY MONITORING SCHEDULE
+CBC with differential: Screening, Week 2, 4, 8, 12, 16, 20, 24, then every 12 weeks
+Liver function (ALT, AST): Screening, Week 4, 8, 12, then every 12 weeks
+Lipid panel: Screening, Week 8, 24, then every 24 weeks
+CPK: Screening, Week 12, 24
+Inflammatory markers (CRP, ESR): Every 4 weeks
+Hepatitis B/C reactivation monitoring: Every 12 weeks in previously exposed patients
+
+7. ADVERSE EVENT MANAGEMENT
+Injection site reactions (adalimumab arm): Manage with ice packs and antihistamines; document severity and duration
+Elevated ALT/AST > 3× ULN: Hold study drug until < 2× ULN, resume at same dose; discontinue if recurs > 5× ULN
+ANC < 500/µL: Discontinue study drug permanently
+Lymphocytes < 500/µL: Hold study drug until > 750/µL, resume if returns within 4 weeks
+Hemoglobin < 8.0 g/dL: Hold study drug until > 9.0 g/dL, resume at same dose
+Herpes zoster: Hold study drug, treat with antivirals, resume after resolution
+Suspected DVT/PE: Discontinue study drug, initiate anticoagulation as clinically indicated

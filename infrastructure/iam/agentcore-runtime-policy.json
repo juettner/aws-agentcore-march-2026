@@ -1,0 +1,94 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "BedrockKnowledgeBaseAccess",
+      "Effect": "Allow",
+      "Action": [
+        "bedrock:Retrieve",
+        "bedrock:RetrieveAndGenerate",
+        "bedrock:InvokeModel"
+      ],
+      "Resource": [
+        "arn:aws:bedrock:*:*:knowledge-base/medflow-*",
+        "arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v2"
+      ]
+    },
+    {
+      "Sid": "AgentCoreMemoryAccess",
+      "Effect": "Allow",
+      "Action": [
+        "agentcore-memory:StoreEpisode",
+        "agentcore-memory:RetrieveEpisodes",
+        "agentcore-memory:SearchSimilar",
+        "agentcore-memory:UpdatePatterns"
+      ],
+      "Resource": "arn:aws:agentcore-memory:*:*:memory-store/medflow-*"
+    },
+    {
+      "Sid": "AgentCoreGatewayAccess",
+      "Effect": "Allow",
+      "Action": [
+        "agentcore-gateway:InvokeTool",
+        "agentcore-gateway:ListTools"
+      ],
+      "Resource": "arn:aws:agentcore-gateway:*:*:gateway/medflow-*"
+    },
+    {
+      "Sid": "AgentCorePolicyAccess",
+      "Effect": "Allow",
+      "Action": [
+        "agentcore-policy:EvaluatePolicy",
+        "agentcore-policy:GetPolicy"
+      ],
+      "Resource": "arn:aws:agentcore-policy:*:*:policy-store/medflow-*"
+    },
+    {
+      "Sid": "AgentCoreIdentityAccess",
+      "Effect": "Allow",
+      "Action": [
+        "agentcore-identity:GetToken",
+        "agentcore-identity:RefreshToken"
+      ],
+      "Resource": "arn:aws:agentcore-identity:*:*:oauth-provider/*"
+    },
+    {
+      "Sid": "LambdaInvocation",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:InvokeFunction"
+      ],
+      "Resource": "arn:aws:lambda:*:*:function:medflow-*"
+    },
+    {
+      "Sid": "CloudWatchLogsAccess",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:log-group:/aws/agentcore/medflow-*"
+    },
+    {
+      "Sid": "S3ReportStorage",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::medflow-generated-reports/*",
+        "arn:aws:s3:::medflow-report-templates/*"
+      ]
+    },
+    {
+      "Sid": "OpenSearchServerlessAccess",
+      "Effect": "Allow",
+      "Action": [
+        "aoss:APIAccessAll"
+      ],
+      "Resource": "arn:aws:aoss:*:*:collection/medflow-*"
+    }
+  ]
+}

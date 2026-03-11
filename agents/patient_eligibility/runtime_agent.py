@@ -25,6 +25,9 @@ from medflow.shared.utils.knowledge_base_client import KnowledgeBaseClient
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+from medflow.shared.utils.cloudwatch_logging import setup_cloudwatch_logging
+setup_cloudwatch_logging()
+
 app = BedrockAgentCoreApp()
 
 # Initialise clients once per container lifetime, not per invocation

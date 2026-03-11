@@ -28,6 +28,9 @@ from medflow.shared.utils.memory_client import MemoryClient
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+from medflow.shared.utils.cloudwatch_logging import setup_cloudwatch_logging
+setup_cloudwatch_logging()
+
 app = BedrockAgentCoreApp()
 
 _memory_client = MemoryClient()

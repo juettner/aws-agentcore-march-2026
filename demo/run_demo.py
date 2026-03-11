@@ -51,7 +51,7 @@ session = boto3.Session(region_name=REGION)
 lambda_client = session.client("lambda")
 bedrock_runtime = session.client("bedrock-runtime")
 bedrock_agent_runtime = session.client("bedrock-agent-runtime")
-agentcore_runtime = session.client("bedrock-agentcore-runtime")
+agentcore_runtime = session.client("bedrock-agentcore")
 verified_permissions = session.client("verifiedpermissions")
 
 
@@ -111,7 +111,7 @@ def invoke_eligibility_runtime(patient_id: str, trial_id: str) -> dict | None:
         payload=payload,
     )
 
-    raw = response.get("payload", b"{}")
+    raw = response.get("response", response.get("payload", b"{}"))
     if hasattr(raw, "read"):
         raw = raw.read()
     return json.loads(raw)
@@ -127,7 +127,7 @@ def _invoke_runtime(arn: str, payload: dict) -> dict | None:
         runtimeSessionId=str(uuid.uuid4()),
         payload=json.dumps(payload).encode(),
     )
-    raw = response.get("payload", b"{}")
+    raw = response.get("response", response.get("payload", b"{}"))
     if hasattr(raw, "read"):
         raw = raw.read()
     return json.loads(raw)

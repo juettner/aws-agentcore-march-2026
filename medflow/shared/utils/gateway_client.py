@@ -76,6 +76,31 @@ class EHRGatewayClient:
         self._credentials = self._credentials.get_frozen_credentials()
 
         self._client = httpx.Client(timeout=timeout)
+        self._tool_name_cache: dict[str, str] | None = None  # short_name → full_name
+
+    def _resolve_tool_name(self, short_name: str) -> str:
+        """Resolve a short tool name to the Gateway-prefixed full name.
+
+        AgentCore Gateway prefixes tool names with the target name, e.g.
+        "get_patient_record" → "medflow-ehr-lambda-target___get_patient_record".
+        Fetches the tool list once and caches the mapping.
+        """
+        if self._tool_name_cache is None:
+            body = json.dumps({"jsonrpc": "2.0", "method": "tools/list", "params": {}, "id": 0})
+            try:
+                signed_headers = self._sign_request("POST", self.gateway_url, body)
+                response = self._client.post(self.gateway_url, content=body, headers=signed_headers)
+                tools = response.json().get("result", {}).get("tools", [])
+                # Build mapping: suffix after last "___" (or full name) → full name
+                self._tool_name_cache = {}
+                for t in tools:
+                    full = t["name"]
+                    suffix = full.split("___")[-1]
+                    self._tool_name_cache[suffix] = full
+            except Exception as e:
+                logger.warning(f"Could not fetch tool list from Gateway: {e}")
+                self._tool_name_cache = {}
+        return self._tool_name_cache.get(short_name, short_name)
 
     def __enter__(self):
         return self
@@ -114,7 +139,7 @@ class EHRGatewayClient:
             "jsonrpc": "2.0",
             "method": "tools/call",
             "params": {
-                "name": tool_name,
+                "name": self._resolve_tool_name(tool_name),
                 "arguments": parameters,
             },
             "id": 1,

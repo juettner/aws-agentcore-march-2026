@@ -68,14 +68,21 @@ class KnowledgeBaseClient:
 
     def _retrieve(self, query: str) -> list[dict[str, Any]]:
         """Call Bedrock Knowledge Base retrieve API."""
-        response = self._client.retrieve(
-            knowledgeBaseId=self.knowledge_base_id,
-            retrievalQuery={"text": query},
-            retrievalConfiguration={
-                "vectorSearchConfiguration": {"numberOfResults": self.top_k}
-            },
-        )
-        return response.get("retrievalResults", [])
+        if not self.knowledge_base_id or self.knowledge_base_id == "PENDING_DEPLOYMENT":
+            logger.warning("Knowledge Base not configured — returning empty results")
+            return []
+        try:
+            response = self._client.retrieve(
+                knowledgeBaseId=self.knowledge_base_id,
+                retrievalQuery={"text": query},
+                retrievalConfiguration={
+                    "vectorSearchConfiguration": {"numberOfResults": self.top_k}
+                },
+            )
+            return response.get("retrievalResults", [])
+        except Exception as e:
+            logger.warning(f"Knowledge Base retrieval failed: {e} — returning empty results")
+            return []
 
     def _parse_trial_protocol(self, results: list[dict]) -> dict[str, Any]:
         """Extract structured criteria from raw retrieval results."""

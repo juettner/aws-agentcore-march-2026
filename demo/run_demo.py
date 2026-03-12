@@ -286,7 +286,7 @@ def demo_scenario_1():
                 result(f"Overall eligibility: {color}{overall.upper()}{RESET}")
                 print()
                 for evaluation in runtime_result.get("criteriaEvaluations", []):
-                    criterion_result = evaluation.get("result", "unknown")
+                    criterion_result = evaluation.get("result", "unknown").lower()
                     c = GREEN if criterion_result == "pass" else RED if criterion_result == "fail" else YELLOW
                     print(f"    {c}{'✓' if criterion_result == 'pass' else '✗'}{RESET} "
                           f"{evaluation.get('criterionText', '')[:80]}")

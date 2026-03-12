@@ -608,15 +608,32 @@ def main():
     print(f"    Policy:    {POLICY_STORE_ID}")
     print()
 
-    pause("Ready to begin the demo? Press Enter to start...")
+    scenarios = {
+        "1": ("Patient Eligibility Screening",         demo_scenario_1),
+        "2": ("Adverse Event Detection",               demo_scenario_2),
+        "3": ("Insurance Authorization (Cedar)",       demo_scenario_3),
+        "a": ("Run all three in sequence",             None),
+    }
 
-    demo_scenario_1()
-    pause("\nReady for Scenario 2?")
+    print(f"  {BOLD}Select a scenario:{RESET}")
+    for key, (label, _) in scenarios.items():
+        print(f"    [{key}] {label}")
+    print()
 
-    demo_scenario_2()
-    pause("\nReady for Scenario 3?")
+    choice = input(f"  {YELLOW}▶{RESET} Enter choice (1/2/3/a): ").strip().lower()
+    while choice not in scenarios:
+        choice = input(f"  {YELLOW}▶{RESET} Invalid — enter 1, 2, 3, or a: ").strip().lower()
 
-    demo_scenario_3()
+    print()
+
+    if choice == "a":
+        demo_scenario_1()
+        pause("\nReady for Scenario 2?")
+        demo_scenario_2()
+        pause("\nReady for Scenario 3?")
+        demo_scenario_3()
+    else:
+        scenarios[choice][1]()
 
     header("DEMO COMPLETE")
     print(f"  {BOLD}Summary of AWS services used:{RESET}")

@@ -7,7 +7,7 @@ from datetime import datetime
 PATIENTS = {
     "PAT-001": {
         "patientId": "PAT-001",
-        "name": "Sarah Johnson",
+        "name": "Simon Schwob",
         "demographics": {"age": 45, "gender": "F", "ethnicity": "Caucasian"},
         "medicalHistory": {
             "diagnoses": [
@@ -35,7 +35,7 @@ PATIENTS = {
     },
     "PAT-002": {
         "patientId": "PAT-002",
-        "name": "Michael Chen",
+        "name": "Matt Leising",
         "demographics": {"age": 62, "gender": "M", "ethnicity": "Asian"},
         "medicalHistory": {
             "diagnoses": [

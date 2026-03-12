@@ -74,7 +74,7 @@ def panel_eligibility(result: dict, elapsed: float) -> Panel:
     t.add_column(style=DIM, justify="right")
     t.add_column()
 
-    t.add_row("Patient",  "Sarah Johnson · PAT-001")
+    t.add_row("Patient",  "Simon Schwob · PAT-001")
     t.add_row("Trial",    "TRIAL-001 · GLP-1 Agonist")
     t.add_row("Result",   Text(overall, style=color))
     t.add_row("Criteria", str(len(result.get("criteriaEvaluations", []))) + " evaluated")
@@ -100,7 +100,7 @@ def panel_adverse_event(result: dict, elapsed: float) -> Panel:
     t.add_column(style=DIM, justify="right")
     t.add_column()
 
-    t.add_row("Patient",          "Michael Chen · PAT-002")
+    t.add_row("Patient",          "Matt Leising · PAT-002")
     t.add_row("Event",            "Grade 3 Neutropenia · Day 14")
     t.add_row("Severity",         Text(f"Grade {grade}/5", style=g_color))
     t.add_row("Alert",            Text("YES ⚠", style=RED) if alert else Text("no", style=GREEN))
@@ -171,14 +171,14 @@ def summary_table(results: list[tuple]) -> Table:
     label, result, elapsed = results[0]
     overall = result.get("overallEligibility", "?").upper()
     c = "bright_green" if overall == "ELIGIBLE" else "yellow"
-    t.add_row("Patient Eligibility", "Sarah Johnson", Text(overall, style=f"bold {c}"),
+    t.add_row("Patient Eligibility", "Simon Schwob", Text(overall, style=f"bold {c}"),
               "Runtime + Gateway + KB", f"{elapsed:.2f}s")
 
     label, result, elapsed = results[1]
     grade = result.get("severity_grade", 0)
     g_c = "bright_red" if grade >= 3 else "yellow" if grade >= 2 else "bright_green"
     cases = len(result.get("historical_cases", []))
-    t.add_row("Adverse Event", "Michael Chen",
+    t.add_row("Adverse Event", "Matt Leising",
               Text(f"Grade {grade}/5  ·  {cases} memory hit{'s' if cases != 1 else ''}", style=f"bold {g_c}"),
               "Runtime + Memory", f"{elapsed:.2f}s")
 

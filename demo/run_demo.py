@@ -12,6 +12,7 @@ Run: python demo/run_demo.py
 import json
 import os
 import sys
+import threading
 import time
 import uuid
 from datetime import datetime
@@ -53,6 +54,19 @@ bedrock_runtime = session.client("bedrock-runtime")
 bedrock_agent_runtime = session.client("bedrock-agent-runtime")
 agentcore_runtime = session.client("bedrock-agentcore")
 verified_permissions = session.client("verifiedpermissions")
+logs_client = session.client("logs")
+
+# CloudWatch log groups for each Runtime agent
+_AGENT_LOG_GROUPS = {
+    "eligibility":    "arn:aws:bedrock-agentcore:us-west-2:853297241922:runtime/medflow_eligibility-FIoHSxAPuc",
+    "adverse_event":  "arn:aws:bedrock-agentcore:us-west-2:853297241922:runtime/medflow_adverse_event-wSgFb8CyBo",
+    "insurance_auth": "arn:aws:bedrock-agentcore:us-west-2:853297241922:runtime/medflow_insurance_auth-A3lEzCDHlz",
+}
+_LOG_GROUP_NAMES = {
+    "eligibility":    "/aws/bedrock-agentcore/runtimes/medflow_eligibility-FIoHSxAPuc-DEFAULT",
+    "adverse_event":  "/aws/bedrock-agentcore/runtimes/medflow_adverse_event-wSgFb8CyBo-DEFAULT",
+    "insurance_auth": "/aws/bedrock-agentcore/runtimes/medflow_insurance_auth-A3lEzCDHlz-DEFAULT",
+}
 
 
 # ============================================================================
@@ -91,6 +105,75 @@ def error(text: str):
 
 def pause(message: str = "Press Enter to continue..."):
     input(f"\n  {YELLOW}▶{RESET} {message}")
+
+
+# Messages to skip — setup noise not interesting for the audience
+_LOG_SKIP = ("CloudWatch logging enabled", "Found credentials", "urllib3", "botocore")
+
+# Friendly labels for known log patterns
+def _format_log_line(msg: str) -> str | None:
+    """Return a display string for a log message, or None to suppress it."""
+    if any(msg.startswith(s) for s in _LOG_SKIP):
+        return None
+    if "HTTP Request: POST https://medflow-ehr-gateway" in msg:
+        return f"{CYAN}[Gateway]{RESET} EHR tool call → Lambda"
+    if "HTTP Request:" in msg:
+        return None  # suppress other HTTP noise
+    return msg
+
+
+def invoke_with_trace(agent_key: str, invoke_fn, *args, **kwargs) -> dict | None:
+    """Run an agent invocation while streaming its CloudWatch logs to stdout.
+
+    Fires the invocation in a background thread, polls the application-logs
+    stream every second, and prints each new log line as it arrives.
+    Returns the invocation result when complete.
+    """
+    log_group = _LOG_GROUP_NAMES.get(agent_key, "")
+    result_box: dict = {"value": None, "done": False}
+    start_ms = int(time.time() * 1000)
+
+    def _run():
+        try:
+            result_box["value"] = invoke_fn(*args, **kwargs)
+        except Exception as exc:
+            result_box["value"] = {"error": str(exc)}
+        finally:
+            result_box["done"] = True
+
+    thread = threading.Thread(target=_run, daemon=True)
+    thread.start()
+
+    seen: set[str] = set()
+    drain_rounds = 0  # keep polling briefly after done to catch trailing flushes
+
+    print(f"  {CYAN}[Agent running — live trace]{RESET}")
+    while not result_box["done"] or drain_rounds < 4:
+        if result_box["done"]:
+            drain_rounds += 1
+        time.sleep(0.8)
+        if not log_group:
+            continue
+        try:
+            resp = logs_client.get_log_events(
+                logGroupName=log_group,
+                logStreamName="application-logs",
+                startTime=start_ms,
+                startFromHead=True,
+            )
+            for event in resp.get("events", []):
+                key = f"{event['timestamp']}:{event['message'][:40]}"
+                if key in seen:
+                    continue
+                seen.add(key)
+                line = _format_log_line(event["message"].strip())
+                if line:
+                    print(f"    {CYAN}→{RESET} {line}")
+        except Exception:
+            pass  # log group may not exist yet; silently continue
+
+    thread.join(timeout=2)
+    return result_box["value"]
 
 
 def invoke_eligibility_runtime(patient_id: str, trial_id: str) -> dict | None:
@@ -194,7 +277,9 @@ def demo_scenario_1():
         print()
 
         try:
-            runtime_result = invoke_eligibility_runtime("PAT-001", "TRIAL-001")
+            runtime_result = invoke_with_trace(
+                "eligibility", invoke_eligibility_runtime, "PAT-001", "TRIAL-001"
+            )
             if runtime_result and "error" not in runtime_result:
                 overall = runtime_result.get("overallEligibility", "unknown")
                 color = GREEN if overall == "eligible" else RED if overall == "ineligible" else YELLOW
@@ -332,7 +417,8 @@ def demo_scenario_2():
         print(f"    Patient PAT-002 | Grade 3 Neutropenia | carboplatin + MF-5120")
         print()
         try:
-            rt = invoke_adverse_event_runtime(
+            rt = invoke_with_trace(
+                "adverse_event", invoke_adverse_event_runtime,
                 patient_id="PAT-002",
                 symptoms=["neutropenia", "fatigue"],
                 medications=["carboplatin", "MF-5120"],
@@ -504,7 +590,8 @@ def demo_scenario_3():
             step(i, f"{case['label']} | {case['patient']} | ${case['amount']:,}")
             print()
             try:
-                rt = invoke_insurance_auth_runtime(
+                rt = invoke_with_trace(
+                    "insurance_auth", invoke_insurance_auth_runtime,
                     patient_id=case["patient"],
                     procedure_code=case["procedure"],
                     description=case["label"],

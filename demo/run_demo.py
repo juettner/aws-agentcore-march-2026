@@ -260,7 +260,7 @@ def pretty_json(data: dict, indent: int = 4) -> str:
 # ============================================================================
 def demo_scenario_1():
     header("SCENARIO 1: Patient Eligibility Screening")
-    print(f"  {BOLD}Context:{RESET} Sarah Johnson (PAT-001) is being screened for")
+    print(f"  {BOLD}Context:{RESET} Simon Schwob (PAT-001) is being screened for")
     print(f"  TRIAL-001 (Type 2 Diabetes, GLP-1 Receptor Agonist study)")
     print()
     print(f"  {BOLD}AgentCore Services Demonstrated:{RESET}")
@@ -401,7 +401,7 @@ Be concise but thorough."""
 # ============================================================================
 def demo_scenario_2():
     header("SCENARIO 2: Adverse Event Detection & Pattern Matching")
-    print(f"  {BOLD}Context:{RESET} Michael Chen (PAT-002) reports Grade 3 Neutropenia")
+    print(f"  {BOLD}Context:{RESET} Matt Leising (PAT-002) reports Grade 3 Neutropenia")
     print(f"  during TRIAL-002 (NSCLC, carboplatin + MF-5120)")
     print()
     print(f"  {BOLD}AgentCore Services Demonstrated:{RESET}")
@@ -465,7 +465,7 @@ def demo_scenario_2():
     step(2, f"Writing to Memory ({MEMORY_ID}) — semantic + summary strategies")
 
     episode_text = (
-        "Patient PAT-002 (Michael Chen, 62M, NSCLC Stage IIIA) on carboplatin + MF-5120. "
+        "Patient PAT-002 (Matt Leising, 62M, NSCLC Stage IIIA) on carboplatin + MF-5120. "
         "Grade 3 Neutropenia detected: ANC 1.1 x10^9/L (reference 1.8-7.7), WBC 3.2 x10^9/L. "
         "Prior history: fatigue Grade 2 since Feb 25. Causality assessment: DEFINITE for "
         "carboplatin-induced myelosuppression."
@@ -523,7 +523,7 @@ def demo_scenario_2():
         prompt = f"""You are an adverse event monitoring AI agent for clinical trials.
 Assess this adverse event and provide recommended actions.
 
-PATIENT: Michael Chen (PAT-002), 62M, NSCLC Stage IIIA
+PATIENT: Matt Leising (PAT-002), 62M, NSCLC Stage IIIA
 TREATMENT: Carboplatin AUC 5 + MF-5120 (anti-PD-L1/VEGF bispecific) q3w
 
 CURRENT ADVERSE EVENT: Grade 3 Neutropenia
